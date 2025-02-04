@@ -1,0 +1,85 @@
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+
+<MudDialog Style="width: 800px; height: 750px;">
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" sm="12">
+                <MudPaper Class="pa-4">
+                    <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                        <MudTextField T="string" Label="Imiê" Required="true" RequiredError="Imiê jest wymagane!" />
+
+
+
+
+
+                        <MudTextField T="string" Label="Numer Telefonu" Placeholder="WprowadŸ numer telefonu" 
+                                      Mask="@(new PatternMask("+00 000 000 000"))"
+                                      Validation="@(new Func<string, string>(CheckNumberPhoneLength))"
+                                      Required="true" RequiredError="Numer telefonu jest wymagany" />
+
+                        <div class="d-flex">
+                            <MudRadioGroup T="string" Required="true" RequiredError="Podmiot jest wymagany!">
+                                <MudRadio Value="@("Personal")">Osoba fizyczna</MudRadio>
+                                <MudRadio Value="@("Firm")">Firma</MudRadio>
+                            </MudRadioGroup>
+                        </div>
+                        <div class="d-flex align-center justify-space-between">
+                            <MudTooltip Text="@agreement">
+                                <MudCheckBox T="bool" Required="true" RequiredError="Musisz wyraziæ zgodê" Label="Zgadzam siê!" />
+                            </MudTooltip>
+                            <div class="d-flex">
+                                
+                            
+                            </div>
+                        </div>
+                    </MudForm>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="12" Style="height: 250px;">
+                <MudPaper Class="pa-4 mud-height-full">
+                    <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
+                    @foreach (var error in errors)
+                    {
+                        <MudText Color="@Color.Error">@error</MudText>
+                    }
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public Car Car { get; set; }
+
+    [Parameter]
+    public Color Color { get; set; }
+
+    bool success;
+    string[] errors = { };
+    MudForm form;
+    string agreement = "Zgoda na Przetwarzanie Danych Osobowych";
+    EmailAddressAttribute emailAddressAttribute = new() { ErrorMessage = "The email address is invalid" };
+
+    private string CheckNumberPhoneLength(string arg)
+    {
+        if (arg.Length < 15)
+            return "Niepoprawny numer telefonu";
+        return null;
+    }
+
+    private void Submit() 
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel()
+    {
+        form.ResetAsync();
+        MudDialog.Cancel();
+    }
+}
