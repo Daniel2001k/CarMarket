@@ -37,12 +37,12 @@ public class ChatHandler(ChatHub chatHub, ISnackbar snackbar)
     }
     private void OnReconnected()
     {
-
-
+        NotifyStateHasChanged();
+        snackbar.Add("Ponownie połączono z czatem", Severity.Success);
     }
     private void OnReconnecting()
     {
-
+        snackbar.Add("Trwa próba połączenia z czatem", Severity.Info);
     }
     public async Task DisposeAsync()
     {
@@ -53,8 +53,8 @@ public class ChatHandler(ChatHub chatHub, ISnackbar snackbar)
 
     private void OnMessageGet(ChatMessage chatMessage)
     {
-
-
-
+        Messages.Add(chatMessage);
+        snackbar.Add($"Przyszła wiadomość od {chatMessage.User}", Severity.Info);
+        NotifyStateHasChanged();
     }
 }
