@@ -13,6 +13,13 @@
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudTooltip Text="Strona główna">
+            <div style="height:72px" class="pa-1 pl-16">
+                <a href="/">
+                    <img draggable="false" src="img/logo.jpg" style="height:100%;" />
+                </a>
+            </div>
+        </MudTooltip>
         <MudSpacer />
         <MudSwitch @bind-Value="isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" ThumbIcon="@(isDarkMode ? @Icons.Material.Filled.DarkMode : @Icons.Material.Filled.LightMode)" />
     </MudAppBar>
@@ -26,7 +33,7 @@
 
 @code {
     private MudTheme theme = new();
-    private bool isDarkMode;
+    private bool isDarkMode = true;
     bool drawerOpen = true;
 
     void DrawerToggle()
