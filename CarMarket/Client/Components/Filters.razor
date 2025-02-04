@@ -70,20 +70,20 @@
 
     private void Filter()
     {
+        var cars = allCars.Where(x => selectedMakes.Contains(x.Make));
+        var b = cars.ToArray();
 
+        if (selectedModels.Any())
+            cars = cars.Where(x => selectedModels.Contains(x.Model));
 
-
-
-
-
-
+        OnCarsChanged.InvokeAsync(cars);
     }
 
     private void Clear()
     {
-
-
-
-
+        makesMudSelect?.Clear();
+        modelsMudSelect?.Clear();
+        
+        OnCarsChanged.InvokeAsync(allCars);
     }
 }
