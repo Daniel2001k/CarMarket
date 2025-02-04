@@ -1,0 +1,41 @@
+﻿@page "/cars"
+
+@inject IHttpService Http
+
+<PageTitle>CarAuctions - Available Cars</PageTitle>
+
+<MudContainer Class="mt-16">
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Car Listings</MudText>
+    <MudGrid Class="mt-8 mb-8">
+        @if (cars == null)
+        {
+            <MudText Align="Align.Center"><em>Loading...</em></MudText>
+        }
+        else
+        {
+            <MudItem xs="12">
+                <Filters OnCarsChanged="RefreshCarsList" Cars="cars" />
+            </MudItem>
+            @foreach (var car in cars)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <CarCard Car="car" />
+                </MudItem>
+            }
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private IEnumerable<Car> cars;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cars = await Http.Get<IEnumerable<Car>>($"api/{Routes.CarApi}/Get");
+    }
+
+    protected void RefreshCarsList(IEnumerable<Car> cars)
+    {
+        this.cars = cars;
+    }
+}
