@@ -70,7 +70,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        cars = [];
+        cars = await Http.Get<IEnumerable<Car>>($"api/{Routes.CarApi}/Get");
         MostExpensiveCar = cars.OrderByDescending(x => x.Price).FirstOrDefault();
     }
 }
