@@ -53,8 +53,8 @@ public class ChatHandler(ChatHub chatHub, ISnackbar snackbar)
 
     private void OnMessageGet(ChatMessage chatMessage)
     {
-
-
-
+        Messages.Add(chatMessage);
+        snackbar.Add($"Przyszła wiadomość od {chatMessage.User}", Severity.Info);
+        NotifyStateHasChanged();
     }
 }
